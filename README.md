@@ -15,15 +15,15 @@ You must download tesseract from https://github.com/UB-Mannheim/tesseract/wiki
 After installiation, move around the files so that it matches this:
 
     .
-    ├── TESSDATA                # tessdata folder (comes with installed tesseract)
-    │   ├── script
-    │   │   ├── Cyrillic.traineddata
-    │   │   ├── Arabic.traineddata
-    │   │   ├── ...
-    │   ├── chi_sim.traineddata 
-    │   ├── eng.traineddata     
-    │   ├── ...
     ├── TESSERACT               # Main installed tesseract engine
+    │   ├── tessdata                # tessdata folder (comes with installed tesseract)
+    │   │   ├── script
+    │   │   │   ├── Cyrillic.traineddata
+    │   │   │   ├── Arabic.traineddata
+    │   │   │   ├── ...
+    │   │   ├── chi_sim.traineddata 
+    │   │   ├── eng.traineddata     
+    │   │   ├── ...
     │   ├── tesseract.exe
     │   ├── text2image.exe
     │   ├── libtesseract-5.dll
