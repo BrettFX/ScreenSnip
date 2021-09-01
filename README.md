@@ -16,7 +16,7 @@ After installiation, move around the files so that it matches this:
 
     .
     ├── TESSERACT               # Main installed tesseract engine
-    │   ├── tessdata                # tessdata folder (comes with installed tesseract)
+    │   ├── tessdata            # tessdata folder (comes with installed tesseract)
     │   │   ├── script
     │   │   │   ├── Cyrillic.traineddata
     │   │   │   ├── Arabic.traineddata
