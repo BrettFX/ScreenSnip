@@ -9,11 +9,17 @@ print("Eventually this window won't be here")
 '''
 
 # Screenshot and windows util
-import ctypes
+# import ctypes
 import mss
 import numpy as np
 import PIL
 import os
+
+# Support for multiple monitors
+from PIL import ImageGrab
+from functools import partial
+ImageGrab.grab = partial(ImageGrab.grab, all_screens=True)
+
 screencap = mss.mss()
 
 def screenshotRegion(screenRegion):
@@ -33,32 +39,43 @@ import threading
 # setup Tesseract paths
 myDirectory = str(pathlib.Path(__file__).parent.absolute())
 tesseractDirectory = myDirectory + r"\TESSERACT"
-tessdataDirectory = myDirectory + r"\TESSDATA"
 
 tesseract.tesseract_cmd = tesseractDirectory + r"\tesseract.exe"
-tessdataConfig = r'--tessdata-dir "%s"' % tessdataDirectory
 
 def getTextFromImg(img, timeout = 3, language = 'eng'):
-    return tesseract.image_to_string(img, timeout = timeout, lang = language, config = tessdataConfig)
+    # return tesseract.image_to_string(img, timeout = timeout, lang = language, config = tessdataConfig)
+    return tesseract.image_to_string(img, timeout = timeout, lang = language)
 
 '''
     UTILS
 '''
 def getVirturalDesktopDimensions():
     # https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics
-    SM_XVIRTUALSCREEN = 76 # LEFTMOST POSITION (not always 0)
-    SM_YVIRTUALSCREEN = 77 # TOPMOST POSITION  (not always 0)
+    # SM_XVIRTUALSCREEN = 76 # LEFTMOST POSITION (not always 0)
+    # SM_YVIRTUALSCREEN = 77 # TOPMOST POSITION  (not always 0)
     
-    SM_CXVIRTUALSCREEN = 78 # WIDTH (of all monitors)
-    SM_CYVIRTUALSCREEN = 79 # HEIGHT (of all monitors)
+    # SM_CXVIRTUALSCREEN = 78 # WIDTH (of all monitors)
+    # SM_CYVIRTUALSCREEN = 79 # HEIGHT (of all monitors)
     
     
-    # https://docs.microsoft.com/en-us/windows/win32/gdi/multiple-monitor-system-metrics
+    # # https://docs.microsoft.com/en-us/windows/win32/gdi/multiple-monitor-system-metrics
+    # return {
+    #     "left": ctypes.windll.user32.GetSystemMetrics(SM_XVIRTUALSCREEN),
+    #     "top": ctypes.windll.user32.GetSystemMetrics(SM_YVIRTUALSCREEN),
+    #     "width": ctypes.windll.user32.GetSystemMetrics(SM_CXVIRTUALSCREEN),
+    #     "height": ctypes.windll.user32.GetSystemMetrics(SM_CYVIRTUALSCREEN)
+    # }
+
+    # Get screen image based on all connected monitors to determine bounding box parameters
+    # TODO unit test to ensure cross-platform compatibility and usable on multiple monitors (e.g., left and top not always 0)
+    screen_img = ImageGrab.grab()
+    left, top, width, height = screen_img.getbbox()
+
     return {
-        "left": ctypes.windll.user32.GetSystemMetrics(SM_XVIRTUALSCREEN),
-        "top": ctypes.windll.user32.GetSystemMetrics(SM_YVIRTUALSCREEN),
-        "width": ctypes.windll.user32.GetSystemMetrics(SM_CXVIRTUALSCREEN),
-        "height": ctypes.windll.user32.GetSystemMetrics(SM_CYVIRTUALSCREEN)
+        "left": left,
+        "top": top,
+        "width": width,
+        "height": height
     }
 
 '''
