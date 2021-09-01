@@ -1,0 +1,5 @@
+Pillow
+mss
+numpy
+PyQt5
+pytesseract
