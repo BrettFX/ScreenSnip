@@ -37,10 +37,14 @@ import pathlib
 import threading
 
 # setup Tesseract paths
-myDirectory = str(pathlib.Path(__file__).parent.absolute())
-tesseractDirectory = myDirectory + r"\TESSERACT"
+# TODO test using tesseract to ensure default path works
+if not tesseract.tesseract_cmd:
+    myDirectory = str(pathlib.Path(__file__).parent.absolute())
+    tesseractDirectory = myDirectory + r"\TESSERACT"
 
-tesseract.tesseract_cmd = tesseractDirectory + r"\tesseract.exe"
+    tesseract.tesseract_cmd = tesseractDirectory + r"\tesseract.exe"
+else:
+    print("Using configured tesseract path: {}".format(tesseract.tesseract_cmd))
 
 def getTextFromImg(img, timeout = 3, language = 'eng'):
     # return tesseract.image_to_string(img, timeout = timeout, lang = language, config = tessdataConfig)
